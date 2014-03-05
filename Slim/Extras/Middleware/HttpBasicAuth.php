@@ -68,6 +68,37 @@ class HttpBasicAuth extends \Slim\Middleware
         $this->realm = $realm;
     }
 
+
+    /**
+     * Deny Access
+     *
+     */
+    public function deny_access() {
+        $res = $this->app->response();
+        $res->status(401);
+        $res->header('WWW-Authenticate', sprintf('Basic realm="%s"', $this->realm));
+    }
+
+    /**
+     * Authenticate
+     *
+     * @param   string  $username   The HTTP Authentication username
+     * @param   string  $password   The HTTP Authentication password
+     *
+     */
+    public function authenticate($username, $password) {
+        if(!ctype_alnum($username))
+            return false;
+
+        if(isset($username) && isset($password)) {
+            $password = crypt($password);
+            // Check database here with $username and $password
+            return true;
+        }
+        else
+            return false;
+    }
+
     /**
      * Call
      *
@@ -81,11 +112,20 @@ class HttpBasicAuth extends \Slim\Middleware
         $res = $this->app->response();
         $authUser = $req->headers('PHP_AUTH_USER');
         $authPass = $req->headers('PHP_AUTH_PW');
-        if ($authUser && $authPass && $authUser === $this->username && $authPass === $this->password) {
+        //if($authUser && $authPass && $authUser === $this->username && $authPass === $this->password
+        if ($this->authenticate($authUser,$authPass)) {
             $this->next->call();
         } else {
-            $res->status(401);
+            $this->deny_access();
+
+            /*
+             * $res->status(401);
             $res->header('WWW-Authenticate', sprintf('Basic realm="%s"', $this->realm));
+           // $res->header('HTTP/1.1 401 Unauthorized', '');
+            //$res->body('<h1>Please enter valid administration credentials</h1>');
+            //$res->redirect('Location : /admin');exit;
+            */
+
         }
     }
 }

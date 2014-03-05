@@ -20,6 +20,12 @@ $app = new \Slim\Slim(array(
     'templates.path' => '../templates/',
 ));
 
+//Automatically load plugins
+$plugins = glob('../routers/*.plugin.php');
+
+foreach ($plugins as $plugin) {
+    require $plugin;
+}
 
 // Automatically load router files
 $routers = glob('../routers/*.router.php');

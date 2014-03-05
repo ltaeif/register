@@ -48,14 +48,14 @@ $app->get('/admin/user/account/forgetpassword', function() use ($app) {
 
 
 // Admin Signout.
-$app->get('/admin/user/account/signout', function() use ($app) {
+$app->get('/admin/user/account/signout',$authCheck, function() use ($app) {
 
     $app->render('admin/user/account/signout.twig');
 });
 
 
 // Admin Dashboard.
-$app->get('/admin/dashboard/', function() use ($app) {
+$app->get('/admin/dashboard/',$authCheck, function() use ($app) {
 
     $app->render('admin/dashboard/index.twig');
 });

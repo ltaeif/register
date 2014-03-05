@@ -1,0 +1,31 @@
+
+{% extends 'front_layout.twig' %}
+{% block bodyclass %}
+    class="pull_top"
+{% endblock %}
+{% block content %}
+
+    <div class="widewrapper pagetitle">
+        <div class="container">
+            <h1>Page not found!</h1>
+        </div>
+    </div>
+
+
+    <div class="widewrapper">
+        <div class="container e404">
+            <h1>404</h1>
+
+            <p>
+                Sorry, the page you are trying to reach is unavailable!
+            </p>
+
+            <p>
+                <a href="{{ SESSION['baseurl'] }}">Take me home</a>
+            </p>
+        </div>
+    </div>
+
+
+{% endblock %}
+

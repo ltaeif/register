@@ -38,7 +38,7 @@ if($mobile->isMobile() || $mDebug){
 	 * This contains SESSION Variables to use in the application
 	 * and mobile_detect class is used to detect mobile browsers.
 	 */
-	include_once('../registry.php');
+	include_once('registry.php');
 
 	/**
 	 * set the site using the url parameter site, or default if not given
