@@ -275,11 +275,10 @@ class User
 		$this->db->setSQL("SELECT * FROM acl_user_roles WHERE user_id = '$uid'");
 		return $this->db->fetchRecords(PDO::FETCH_ASSOC);
 	}
-	
-	
-	
-	//Login & Register methods
-	
+
+
+    //Login & Register methods
+
     /* ------------- `users` table method ------------------ */
 
     /**
@@ -296,9 +295,9 @@ class User
         if (!$this->isUserExists($email)) {
             // Generating password hash
             //$password_hash = PassHash::hash($password);
-			
-			$aes    = $this->getAES();
-			$password_hash = $aes->encrypt($newpassword);
+
+            $aes    = $this->getAES();
+            $password_hash = $aes->encrypt($password);
 
             // Generating API key
             $api_key = $this->generateApiKey();
@@ -311,30 +310,30 @@ class User
 
             $stmt->close();
 			*/
-			
-			//remove null
-			/*foreach($data as $key => $val){
-				if($val == null || $val == ''){
-					unset($data[$key]);
-				}
-			}*/
-			
-			$data=array('fname'=>$fname,'password'=>$password_hash,'email'=>$email,,'authorized'=>0,'active'=>1);
-			
-			$sql = $this->db->sqlBind($data, 'users', 'I');
-			$this->db->setSQL($sql);
-			$this->db->execLog();
-			$params->id = $this->user_id = $this->db->lastInsertId;
-			$params->fullname = Person::fullname($params->fname, $params->mname, $params->lname);
-			if($params->password != ''){
-				$this->changePassword($params->password);
-			}
-			$params->password = '';
-			$role['user_id']  = $params->id;
-			$sql              = $this->db->sqlBind($role, 'acl_user_roles', 'I');
-			$this->db->setSQL($sql);
-			$this->db->execLog();
-			
+
+            //remove null
+            /*foreach($data as $key => $val){
+                if($val == null || $val == ''){
+                    unset($data[$key]);
+                }
+            }*/
+
+            $data=array('fname'=>$fname,'password'=>$password_hash,'email'=>$email,'authorized'=>0,'active'=>1);
+
+            $sql = $this->db->sqlBind($data, 'users', 'I');
+            $this->db->setSQL($sql);
+            $this->db->execLog();
+            $params->id = $this->user_id = $this->db->lastInsertId;
+            $params->fullname = Person::fullname($params->fname, $params->mname, $params->lname);
+            if($params->password != ''){
+                $this->changePassword($params->password);
+            }
+            $params->password = '';
+            $role['user_id']  = $params->id;
+            $sql              = $this->db->sqlBind($role, 'acl_user_roles', 'I');
+            $this->db->setSQL($sql);
+            $this->db->execLog();
+
             // Check for successful insertion
             if ($result) {
                 // User successfully inserted
@@ -453,20 +452,20 @@ class User
      * Fetching user id by api key
      * @param String $api_key user api key
      */
-   /* public function getUserId($api_key) {
-        $stmt = $this->conn->prepare("SELECT id FROM users WHERE api_key = ?");
-        $stmt->bind_param("s", $api_key);
-        if ($stmt->execute()) {
-            $stmt->bind_result($user_id);
-            $stmt->fetch();
-            // TODO
-            // $user_id = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-            return $user_id;
-        } else {
-            return NULL;
-        }
-    }*/
+    /* public function getUserId($api_key) {
+         $stmt = $this->conn->prepare("SELECT id FROM users WHERE api_key = ?");
+         $stmt->bind_param("s", $api_key);
+         if ($stmt->execute()) {
+             $stmt->bind_result($user_id);
+             $stmt->fetch();
+             // TODO
+             // $user_id = $stmt->get_result()->fetch_assoc();
+             $stmt->close();
+             return $user_id;
+         } else {
+             return NULL;
+         }
+     }*/
 
     /**
      * Validating user api key
@@ -490,12 +489,13 @@ class User
     private function generateApiKey() {
         return md5(uniqid(rand(), true));
     }
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
 }
 
